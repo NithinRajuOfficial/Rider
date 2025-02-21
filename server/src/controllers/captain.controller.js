@@ -1,3 +1,4 @@
+import blacklistToken from "../models/blacklistToken.model.js";
 import captainModel from "../models/captain.model.js";
 import { createCaptain } from "../services/captain.services.js";
 
@@ -82,6 +83,41 @@ export const login = async (req, res, next) => {
       success: true,
       message: "Captain logged in successfully",
       data: { loggedInCaptain, token },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCaptainProfile = async (req, res, next) => {
+  try {
+    const captain = await captainModel.findById(req.captain._id);
+    if (!captain) {
+      return res.status(404).json({
+        success: false,
+        message: "Captain not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Captain profile retrieved successfully",
+      data: captain,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("token");
+    const token =
+      req.cookies.token || req.headers?.authorization?.split(" ")[1];
+    const blacklistedToken = await blacklistToken.create({ token });
+    return res.json({
+      success: true,
+      message: "Captain logged out successfully",
     });
   } catch (error) {
     next(error);
