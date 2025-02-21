@@ -53,7 +53,7 @@ Registers a new user.
 ```json
 {
   "success": false,
-  "errors": "string" // if multiple errors then it will be in array
+  "errors": "string"
 }
 ```
 
@@ -126,7 +126,7 @@ Logs in an existing user.
 ```json
 {
   "success": false,
-  "errors": "string" // if multiple errors then it will be in array
+  "errors": "string"
 }
 ```
 
