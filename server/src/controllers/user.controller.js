@@ -10,6 +10,14 @@ export const register = async (req, res, next) => {
       password,
     } = req.body;
 
+    isUserExist = await userModel.findOne({ email });
+    if (isUserExist) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists",
+      });
+    }
+    
     const hashedPassword = await userModel.hashPassword(password);
 
     const user = await createUser({
@@ -96,7 +104,7 @@ export const logout = async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization.split(" ")[1];
 
     await blacklistToken.create({ token });
-    
+
     return res.json({
       success: true,
       message: "User logged out successfully",
