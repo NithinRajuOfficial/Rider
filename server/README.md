@@ -359,3 +359,91 @@ This endpoint registers a new captain by accepting their first name, last name, 
 - **vehicle.vehicleType**: Must be one of "car", "motorcycle", or "auto".
 
 ---
+
+---
+
+### POST /api/captains/login
+
+Logs in an existing captain.
+
+#### Request
+
+- **URL**: `/api/captains/login`
+- **Method**: `POST`
+- **Headers**:
+  - `Content-Type: application/json`
+- **Body**:
+  ```json
+  {
+    "email": "string",
+    "password": "string"
+  }
+  ```
+
+#### Response
+
+**Success (200 OK)**:
+
+```json
+{
+  "success": true,
+  "message": "Captain logged in successfully",
+  "data": {
+    "captain": {
+      "_id": "string",
+      "fullName": {
+        "firstName": "string",
+        "lastName": "string"
+      },
+      "email": "string",
+      "vehicle": {
+        "color": "string",
+        "plate": "string",
+        "capacity": 1,
+        "vehicleType": "car"
+      },
+      "createdAt": "string",
+      "updatedAt": "string"
+    },
+    "token": "string"
+  }
+}
+```
+
+**Validation Error (400 Bad Request)**:
+
+```json
+{
+  "success": false,
+  "errors": "string"
+}
+```
+
+**Authentication Error (401 Unauthorized)**:
+
+```json
+{
+  "success": false,
+  "message": "Invalid email or password"
+}
+```
+
+**Server Error (500 Internal Server Error)**:
+
+```json
+{
+  "success": false,
+  "message": "string"
+}
+```
+
+#### Description
+
+This endpoint logs in an existing captain by accepting their email and password. Upon successful authentication, a JWT token is generated and returned along with the captain details.
+
+#### Validation Rules
+
+- **email**: Must be a valid email address.
+- **password**: Must be at least 8 characters long.
+
+---
