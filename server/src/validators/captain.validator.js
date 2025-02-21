@@ -52,3 +52,13 @@ export const registerValidationRulesCaptain = [
     .isNumeric()
     .withMessage("Longitude must be a number"),
 ];
+
+
+// Define validation rules of login captain
+export const loginValidationRulesCaptain = [
+    body("email").isEmail().withMessage("Email is invalid"),
+    body("password")
+      .isLength({ min: 8 })
+      .withMessage("Password must be at least 8 characters long"),
+  ];
+  
