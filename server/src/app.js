@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.routes.js";
+import captainRoutes from "./routes/captain.routes.js";
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/users", userRoutes);
-
+app.use("/api/captains", captainRoutes);
 // Error Handling Middleware
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({

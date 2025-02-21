@@ -3,8 +3,8 @@ const router = express.Router();
 import {
   loginValidationRules,
   registerValidationRules,
-  validate,
 } from "../validators/user.validators.js";
+import { validate } from "../middlewares/expressValidator.middleware.js";
 import {
   register,
   login,
@@ -24,4 +24,6 @@ router.get("/profile", authUser, getUserProfile);
 
 // User Logout
 router.get("/logout", authUser, logout);
+
+
 export default router;
