@@ -10,7 +10,7 @@ Registers a new user.
 
 - **URL**: `/api/users/register`
 - **Method**: `POST`
-- **Headers**: 
+- **Headers**:
   - `Content-Type: application/json`
 - **Body**:
   ```json
@@ -53,13 +53,7 @@ Registers a new user.
 ```json
 {
   "success": false,
-  "errors": [
-    {
-      "msg": "string",
-      "param": "string",
-      "location": "string"
-    }
-  ]
+  "errors": "string" // if multiple errors then it will be in array
 }
 ```
 
@@ -85,3 +79,82 @@ This endpoint registers a new user by accepting their first name, last name, ema
 
 ---
 
+### POST /api/users/login
+
+Logs in an existing user.
+
+#### Request
+
+- **URL**: `/api/users/login`
+- **Method**: `POST`
+- **Headers**:
+  - `Content-Type: application/json`
+- **Body**:
+  ```json
+  {
+    "email": "string",
+    "password": "string"
+  }
+  ```
+
+#### Response
+
+**Success (200 OK)**:
+
+```json
+{
+  "success": true,
+  "message": "User logged in successfully",
+  "data": {
+    "user": {
+      "_id": "string",
+      "fullName": {
+        "firstName": "string",
+        "lastName": "string"
+      },
+      "email": "string",
+      "createdAt": "string",
+      "updatedAt": "string"
+    },
+    "token": "string"
+  }
+}
+```
+
+**Validation Error (400 Bad Request)**:
+
+```json
+{
+  "success": false,
+  "errors": "string" // if multiple errors then it will be in array
+}
+```
+
+**Authentication Error (401 Unauthorized)**:
+
+```json
+{
+  "success": false,
+  "message": "Invalid email or password"
+}
+```
+
+**Server Error (500 Internal Server Error)**:
+
+```json
+{
+  "success": false,
+  "message": "string"
+}
+```
+
+#### Description
+
+This endpoint logs in an existing user by accepting their email and password. Upon successful authentication, a JWT token is generated and returned along with the user details.
+
+#### Validation Rules
+
+- **email**: Must be a valid email address.
+- **password**: Must be at least 8 characters long.
+
+---
