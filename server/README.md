@@ -53,7 +53,7 @@ Registers a new user.
 ```json
 {
   "success": false,
-  "errors": "string" // if multiple errors then it will be in array
+  "errors": "string"
 }
 ```
 
@@ -126,7 +126,7 @@ Logs in an existing user.
 ```json
 {
   "success": false,
-  "errors": "string" // if multiple errors then it will be in array
+  "errors": "string"
 }
 ```
 
@@ -156,5 +156,109 @@ This endpoint logs in an existing user by accepting their email and password. Up
 
 - **email**: Must be a valid email address.
 - **password**: Must be at least 8 characters long.
+
+---
+
+---
+
+### GET /api/users/profile
+
+Fetches the profile of the logged-in user.
+
+#### Request
+
+- **URL**: `/api/users/profile`
+- **Method**: `GET`
+- **Headers**:
+  - `Authorization`: `Bearer <token>`
+
+#### Response
+
+**Success (200 OK)**:
+
+```json
+{
+  "success": true,
+  "message": "User profile",
+  "data": {
+    "_id": "string",
+    "fullName": {
+      "firstName": "string",
+      "lastName": "string"
+    },
+    "email": "string",
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
+}
+```
+
+**Authentication Error (401 Unauthorized)**:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized"
+}
+```
+
+**Server Error (500 Internal Server Error)**:
+
+```json
+{
+  "success": false,
+  "message": "string"
+}
+```
+
+#### Description
+
+This endpoint fetches the profile of the logged-in user. The user must provide a valid JWT token in the `Authorization` header.
+
+---
+
+### GET /api/users/logout
+
+Logs out the logged-in user.
+
+#### Request
+
+- **URL**: `/api/users/logout`
+- **Method**: `GET`
+- **Headers**:
+  - `Authorization`: `Bearer <token>`
+
+#### Response
+
+**Success (200 OK)**:
+
+```json
+{
+  "success": true,
+  "message": "User logged out successfully"
+}
+```
+
+**Authentication Error (401 Unauthorized)**:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized"
+}
+```
+
+**Server Error (500 Internal Server Error)**:
+
+```json
+{
+  "success": false,
+  "message": "string"
+}
+```
+
+#### Description
+
+This endpoint logs out the logged-in user by clearing the authentication token. The user must provide a valid JWT token in the `Authorization` header.
 
 ---
