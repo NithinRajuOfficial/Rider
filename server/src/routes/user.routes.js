@@ -14,7 +14,7 @@ import {
 import { authUser } from "../middlewares/auth.middleware.js";
 
 // User Register
-router.post("/register", registerValidationRules, validate, register);
+router.post("/signup", registerValidationRules, validate, register);
 
 // User Login
 router.post("/login", loginValidationRules, validate, login);

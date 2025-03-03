@@ -2,11 +2,11 @@ import { body } from "express-validator";
 
 export const registerValidationRulesCaptain = [
   // Full Name Validation
-  body("fullName.firstName")
+  body("firstName")
     .trim()
     .isLength({ min: 3 })
     .withMessage("First name must be at least 3 characters long"),
-  body("fullName.lastName")
+  body("lastName")
     .optional()
     .trim()
     .isLength({ min: 3 })
@@ -27,18 +27,18 @@ export const registerValidationRulesCaptain = [
     .withMessage('Status must be "active" or "inactive"'),
 
   // Vehicle Validation
-  body("vehicle.color")
+  body("vehicleColor")
     .trim()
     .isLength({ min: 3 })
     .withMessage("Color must be at least 3 characters long"),
-  body("vehicle.plate")
+  body("vehiclePlate")
     .trim()
     .isLength({ min: 3 })
     .withMessage("Plate must be at least 3 characters long"),
-  body("vehicle.capacity")
+  body("vehicleCapacity")
     .isInt({ min: 1 })
     .withMessage("Capacity must be at least 1"),
-  body("vehicle.vehicleType")
+  body("vehicleType")
     .isIn(["car", "motorcycle", "auto"])
     .withMessage('Vehicle type must be "car", "motorcycle", or "auto"'),
 

@@ -2,18 +2,41 @@ import { FcGoogle } from "react-icons/fc";
 import CustomInputTag from "../components/Input";
 import useFormHandler from "../hooks/useFormHandler";
 import { userLoginValidationSchema } from "../utils/yupValidations";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AnimatedGridPattern from "../components/AnimatedGridLayout";
+import { showErrorToast, showSuccessToast } from "../utils/toastNotification";
+import axiosInstance from "../utils/axiosInstance";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/authSlice";
 
 const UserLogin = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { register, handleSubmit, errors, reset } = useFormHandler(
     userLoginValidationSchema
   );
 
-  const onSubmit = (data) => {
-    console.log(data)
-    reset();
-    // Handle login logic here
+  const onSubmit = async (data) => {
+    try {
+      const {
+        data: { success, userData, token, message },
+      } = await axiosInstance.post("/users/login", data);
+
+      console.log(success, userData, token, message);
+
+      if (success) {
+        dispatch(setUser({ user: userData, token: token }));
+        navigate("/home");
+        showSuccessToast(message);
+      }
+    } catch (error) {
+      showErrorToast("Login Failed!..");
+      if (import.meta.env.MODE === "development") {
+        console.error("Login Error: ", error);
+      }
+    } finally {
+      reset();
+    }
   };
 
   return (

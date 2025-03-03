@@ -14,7 +14,7 @@ import {
 import { authCaptain } from "../middlewares/auth.middleware.js";
 
 // Captain Register
-router.post("/register", registerValidationRulesCaptain, validate, register);
+router.post("/signup", registerValidationRulesCaptain, validate, register);
 
 // Captain Login
 router.post("/login", loginValidationRulesCaptain, validate, login);

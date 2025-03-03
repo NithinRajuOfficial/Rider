@@ -2,29 +2,52 @@ import { FcGoogle } from "react-icons/fc";
 import CustomInputTag from "../components/Input";
 import useFormHandler from "../hooks/useFormHandler";
 import { captainLoginValidationSchema } from "../utils/yupValidations";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AnimatedGridPattern from "../components/AnimatedGridLayout";
+import axiosInstance from "../utils/axiosInstance";
+import { useDispatch } from "react-redux";
+import { showErrorToast, showSuccessToast } from "../utils/toastNotification";
+import { setCaptain } from "../redux/authSliceCaptain";
 
 const UserLogin = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { register, handleSubmit, errors, reset } = useFormHandler(
     captainLoginValidationSchema
   );
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
-    // Handle login logic here
+  const onSubmit = async (data) => {
+    try {
+      const {
+        data: { success, userData, token, message },
+      } = await axiosInstance.post("/captains/login", data);
+
+      console.log(success, userData, token, message);
+
+      if (success) {
+        dispatch(setCaptain({ user: userData, token: token }));
+        navigate("/captain-home");
+        showSuccessToast(message);
+      }
+    } catch (error) {
+      showErrorToast("Login Failed!..");
+      if (import.meta.env.MODE === "development") {
+        console.error("Login Error: ", error);
+      }
+    } finally {
+      reset();
+    }
   };
 
   return (
     <article className="h-screen max-w-md mx-auto px-5 md:p-0 flex items-center justify-center">
-       <div className="hidden md:block absolute inset-0 z-0">
+      <div className="hidden md:block absolute inset-0 z-0">
         <AnimatedGridPattern
           columns={70}
           rows={30}
           cellSize={25}
           gap={1}
-          backgroundColor="#f8fafc" 
+          backgroundColor="#f8fafc"
           lineColor="#e2e8f0"
           highlightColor="#3b82f6"
         />

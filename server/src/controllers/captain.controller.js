@@ -3,12 +3,17 @@ import captainModel from "../models/captain.model.js";
 import { createCaptain } from "../services/captain.services.js";
 
 export const register = async (req, res, next) => {
+  console.log("came here");
   try {
     const {
-      fullName: { firstName, lastName },
+      firstName,
+      lastName,
       email,
       password,
-      vehicle: { color, plate, capacity, vehicleType },
+      vehicleColor,
+      vehiclePlate,
+      vehicleCapacity,
+      vehicleType,
     } = req.body;
 
     const isCaptainExist = await captainModel.findOne({ email });
@@ -21,19 +26,25 @@ export const register = async (req, res, next) => {
 
     const hashedPassword = await captainModel.hashPassword(password);
 
-    const captain = await createCaptain({
-      firstName,
-      lastName,
-      email,
+    const captain = await captainModel.create({
+      fullName: {
+        firstName: firstName,
+        lastName: lastName,
+      },
+      email: email,
       password: hashedPassword,
-      color,
-      plate,
-      capacity,
-      vehicleType,
+      vehicle: {
+        color: vehicleColor,
+        plate: vehiclePlate,
+        capacity: vehicleCapacity,
+        vehicleType: vehicleType,
+      },
     });
 
     const token = await captain.generateAuthToken();
-    const registeredCaptain = await captainModel.findById(captain._id);
+    const userData = await captainModel
+      .findById(captain._id)
+      .select("-__v -createdAt -updatedAt");
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -42,8 +53,9 @@ export const register = async (req, res, next) => {
 
     return res.json({
       success: true,
-      message: "Captain created successfully",
-      data: { registeredCaptain, token },
+      message: "Signup Successful!..",
+      userData,
+      token,
     });
   } catch (error) {
     next(error);
@@ -72,7 +84,9 @@ export const login = async (req, res, next) => {
     }
 
     const token = await captain.generateAuthToken();
-    const loggedInCaptain = await captainModel.findById(captain._id);
+    const userData = await captainModel
+      .findById(captain._id)
+      .select("-__v -createdAt -updatedAt");
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -81,8 +95,9 @@ export const login = async (req, res, next) => {
 
     return res.json({
       success: true,
-      message: "Captain logged in successfully",
-      data: { loggedInCaptain, token },
+      message: "Login Successful!..",
+      userData,
+      token,
     });
   } catch (error) {
     next(error);

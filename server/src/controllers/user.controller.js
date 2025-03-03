@@ -3,6 +3,7 @@ import userModel from "../models/user.model.js";
 import { createUser } from "../services/user.services.js";
 
 export const register = async (req, res, next) => {
+  console.log(req.body, "----------");
   try {
     const {
       fullName: { firstName, lastName },
@@ -10,14 +11,14 @@ export const register = async (req, res, next) => {
       password,
     } = req.body;
 
-    isUserExist = await userModel.findOne({ email });
+    const isUserExist = await userModel.findOne({ email });
     if (isUserExist) {
       return res.status(400).json({
         success: false,
         message: "User already exists",
       });
     }
-    
+
     const hashedPassword = await userModel.hashPassword(password);
 
     const user = await createUser({
@@ -37,8 +38,9 @@ export const register = async (req, res, next) => {
     });
     return res.status(201).json({
       success: true,
-      message: "User created successfully",
-      data: { registeredUser, token },
+      message: "Signup successful!",
+      registeredUser,
+      token,
     });
   } catch (error) {
     next(error);
@@ -63,7 +65,9 @@ export const login = async (req, res, next) => {
       });
     }
     const token = await user.generateAuthToken();
-    const loggedInUser = await userModel.findById(user._id);
+    const userData = await userModel
+      .findById(user._id)
+      .select("-__v -createdAt -updatedAt");
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -71,8 +75,9 @@ export const login = async (req, res, next) => {
     });
     return res.json({
       success: true,
-      message: "User logged in successfully",
-      data: { loggedInUser, token },
+      message: "Login Successful!.",
+      userData,
+      token,
     });
   } catch (error) {
     next(error);

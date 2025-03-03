@@ -30,6 +30,17 @@ const userSignupValidationSchema = yup.object().shape({
     .required("Password is required"),
 });
 
+const captainSignupValidationSchema = yup.object().shape({
+  firstName: yup.string().required("First Name is required"),
+  lastName: yup.string().required("Last Name is required"),
+  email: yup.string().email("Invalid Email").required("Email is required"),
+  password: yup.string().min(8, "Minimum 8 characters").required(),
+  vehicleColor: yup.string().required("Vehicle Color is required"),
+  vehiclePlate: yup.string().required("Vehicle Plate is required"),
+  vehicleCapacity: yup.string().required("Vehicle Capacity is required"),
+  vehicleType: yup.string().required("Vehicle Type is required"),
+});
+
 const captainLoginValidationSchema = yup.object().shape({
   email: yup
     .string()
@@ -44,5 +55,6 @@ const captainLoginValidationSchema = yup.object().shape({
 export {
   userLoginValidationSchema,
   userSignupValidationSchema,
+  captainSignupValidationSchema,
   captainLoginValidationSchema,
 };

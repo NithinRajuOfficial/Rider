@@ -2,18 +2,44 @@ import { FcGoogle } from "react-icons/fc";
 import CustomInputTag from "../components/Input";
 import useFormHandler from "../hooks/useFormHandler";
 import { userSignupValidationSchema } from "../utils/yupValidations";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AnimatedGridPattern from "../components/AnimatedGridLayout";
+import axiosInstance from "../utils/axiosInstance";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/authSlice";
+import { showErrorToast, showSuccessToast } from "../utils/toastNotification";
 
 const UserLogin = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { register, handleSubmit, errors, reset } = useFormHandler(
     userSignupValidationSchema
   );
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
-    // Handle login logic here
+  const onSubmit = async (data) => {
+    const userData = {
+      fullName: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      },
+      email: data.email,
+      password: data.password,
+    };
+    try {
+      const { data } = await axiosInstance.post("/users/signup", userData);
+      if (data?.success) {
+        dispatch(setUser({ user: data?.registeredUser}));
+        navigate("/home");
+        showSuccessToast(data?.message);
+      }
+    } catch (error) {
+      showErrorToast("Signup Failed, Please retry later..");
+      if (import.meta.env.MODE === "development") {
+        console.error("Signup Error: ", error);
+      }
+    } finally {
+      reset();
+    }
   };
 
   return (
