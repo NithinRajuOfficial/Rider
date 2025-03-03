@@ -213,7 +213,7 @@ Fetches the profile of the logged-in user.
 
 #### Description
 
-This endpoint fetches the profile of the logged-in user. The user must provide a valid JWT token in the `Authorization` header.
+This endpoint fetches the profile of the logged-in user. The user must provide a valid JWT token in the `Authorization` header, or in cookie.
 
 ---
 
@@ -259,7 +259,7 @@ Logs out the logged-in user.
 
 #### Description
 
-This endpoint logs out the logged-in user by clearing the authentication token. The user must provide a valid JWT token in the `Authorization` header.
+This endpoint logs out the logged-in user by clearing the authentication token. The user must provide a valid JWT token in the `Authorization` header, or in cookie.
 
 ---
 
@@ -445,5 +445,115 @@ This endpoint logs in an existing captain by accepting their email and password.
 
 - **email**: Must be a valid email address.
 - **password**: Must be at least 8 characters long.
+
+---
+
+---
+
+### GET /api/captains/profile
+
+Fetches the profile of the logged-in captain.
+
+#### Request
+
+- **URL**: `/api/captains/profile`
+- **Method**: `GET`
+- **Headers**:
+  - `Authorization`: `Bearer <token>`
+
+#### Response
+
+**Success (200 OK)**:
+
+```json
+{
+  "success": true,
+  "message": "Captain profile retrieved successfully",
+  "data": {
+    "_id": "string",
+    "fullName": {
+      "firstName": "string",
+      "lastName": "string"
+    },
+    "email": "string",
+    "vehicle": {
+      "color": "string",
+      "plate": "string",
+      "capacity": 1,
+      "vehicleType": "car"
+    },
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
+}
+```
+
+**Authentication Error (401 Unauthorized)**:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized"
+}
+```
+
+**Server Error (500 Internal Server Error)**:
+
+```json
+{
+  "success": false,
+  "message": "string"
+}
+```
+
+#### Description
+
+This endpoint fetches the profile of the logged-in captain. The captain must provide a valid JWT token in the `Authorization` header, or in cookie.
+
+---
+
+### GET /api/captains/logout
+
+Logs out the logged-in captain.
+
+#### Request
+
+- **URL**: `/api/captains/logout`
+- **Method**: `GET`
+- **Headers**:
+  - `Authorization`: `Bearer <token>`
+
+#### Response
+
+**Success (200 OK)**:
+
+```json
+{
+  "success": true,
+  "message": "Captain logged out successfully"
+}
+```
+
+**Authentication Error (401 Unauthorized)**:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized"
+}
+```
+
+**Server Error (500 Internal Server Error)**:
+
+```json
+{
+  "success": false,
+  "message": "string"
+}
+```
+
+#### Description
+
+This endpoint logs out the logged-in captain by clearing the authentication token. The captain must provide a valid JWT token in the `Authorization` header, or in cookie.
 
 ---
